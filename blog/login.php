@@ -31,7 +31,7 @@
   <body>
   <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
-        <a class="navbar-brand" href="index.html">
+        <a class="navbar-brand" href="index.php">
         Auto Blog
         </a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,7 +79,12 @@
             <br>
             <div id="success"></div>
             <div class="form-group">
-              <input type="submit" class="btn btn-primary" value="Se connecter" name="formlogin" id="userConnectionButton" required>
+              <input type="submit" class="btn btn-primary" value="Se connecter" name="formlogin" id="userConnectionButton" >
+            </div>
+            <div class="form-group">
+              <a href="inscription.php" >
+                <span type="text" class="btn btn-primary" name="formlogin" id="inscription"> S'inscrire</span>
+              </a> 
             </div>
           </form>
         </div>
@@ -101,6 +106,8 @@
             if(sha1($password) == $result['password']){
               session_start ();
               $_SESSION['email'] = $result['email'];
+              $_SESSION['type'] = $result['type'];
+              $_SESSION['id'] = $result['id'];
               $_SESSION['type'] = $result['type'];
               header('Location: index.php');
               exit();

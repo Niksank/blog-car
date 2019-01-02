@@ -1,9 +1,14 @@
 <?php
   session_start();
   if(isset($_SESSION['email'])){
-    $id = $_SESSION['id'];
-    include 'bdd/database.php';
-    global $bdd;  
+    if($_SESSION['type'] == 'superuser'){
+      $id = $_SESSION['id'];
+      include 'bdd/database.php';
+      global $bdd;  
+    }
+    else{
+      header('Location: index.php');
+    }
   }
   else if(!isset($_SESSION['email'])){
     session_destroy();
@@ -58,7 +63,7 @@
             <?php 
               if($_SESSION['type'] == 'superuser'){
               echo' <li class="nav-item">
-              <a class="nav-link" href="admin.php">Administrateur</a>
+              <a class="nav-link" href="#">Administrateur</a>
             </li>';  
               }
             ?>
@@ -81,8 +86,8 @@
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
-              <h1>Actualité</h1>
-              <span class="subheading">Nouveautés sur l'automobiles</span>
+              <h1>Administrateur</h1>
+              <span class="subheading">Gérer le blog</span>
             </div>
           </div>
         </div>
@@ -93,26 +98,19 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-        <?php
-        $request = $bdd -> prepare("SELECT * FROM articles INNER JOIN user ON articles.id_user = user.id WHERE id_user = :id_user");
-        $request -> execute(['id_user' => $_SESSION['id']]);
-        while($row = $request -> fetch()){
-          echo'
-                <div class="post-preview">
-                  <a href="post.html">
-                    <h2 class="post-title">'.$row['title'].'</h2>
-                    <h3 class="post-subtitle">'.$row['description'].'</h3>
-                   </a>
-                  <p class="post-meta">Publié par
-                  <a href="#">'.$row['name'].' </a> le '.$row['date'].'</p>
-                </div>
-                <hr>';
-        }
-
-        ?>
+        
           <!-- Pager -->
-          <div class="clearfix">
-            <a class="btn btn-primary float-right" href="#">En voir plus &rarr;</a>
+          <div class="add-article">
+            <a class="btn btn-primary float-left" href="pages/add-article.php"> Ajouter un article </a>
+          </div>
+          <div class="clearfix add-user">
+            <a class="btn btn-primary float-right" href="pages/add-user.php"> Ajouter un utilisateur </a>
+          </div> </br>
+          <div class="find-user">
+            <a class="btn btn-primary float-left" href="pages/find-user.php"> Trouver un utilisateur </a>
+          </div>
+          <div class="clearfix find-article">
+            <a class="btn btn-primary float-right" href="pages/find-article.php"> Trouver un article </a>
           </div>
         </div>
       </div>
