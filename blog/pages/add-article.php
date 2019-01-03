@@ -104,43 +104,35 @@
           <form method="post" novalidate>
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
-                <label>Name</label>
-                <input name="name" type="text" class="form-control" placeholder="Nom" id="name" required data-validation-required-message="Veuillez rentrer votre nom">
+                <label>Titre</label>
+                <input name="title" type="text" class="form-control" placeholder="Titre" id="title" required data-validation-required-message="Veuillez rentrer votre nom">
                 <p class="help-block text-danger"></p>
               </div> 
             </div>
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
-                <label>Prenom</label>
-                <input type="text" name="firstname" class="form-control" placeholder="Prénom" id="firstname" required data-validation-required-message="Veuillez rentrer votre prénom">
+                <label>Sous-titre</label>
+                <input type="text" name="subtitle" class="form-control" placeholder="Sous-titre" id="subtitle" required data-validation-required-message="Veuillez rentrer votre prénom">
                 <p class="help-block text-danger"></p>
               </div> 
             </div>
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
-                <label>Email</label>
-                <input type="email" name="email" class="form-control" placeholder="Email" id="email" required data-validation-required-message="Veuillez rentrer votre email">
+                <label>Categorie</label>
+                <input type="text" name="category" class="form-control" placeholder="Categorie" id="category" required data-validation-required-message="Veuillez rentrer la categorie">
                 <p class="help-block text-danger"></p>
               </div>
             </div>
             <div class="control-group">
               <div class="form-group col-xs-12 floating-label-form-group controls">
-                <label>Password</label>
-                <input type="password" name="password" class="form-control" placeholder="Mot de passe" id="password" required data-validation-required-message="Veuillez entrer un mot de passe.">
-                <p class="help-block text-danger"></p>
-              </div>
-            </div>
-            <div class="control-group">
-              <div class="form-group floating-label-form-group controls">
-                <label>Re Password</label>
-                <input type="password" class="form-control" name="validation_password" placeholder="Validation Mot de passe" id="validate-password" required data-validation-required-message="Veuillez valider votre mot de passe.">
-                <p class="help-block text-danger"></p>
+                <label>Description</label>
+                <textarea name="description" id="description" class="form-control" cols="40" rows="5" placeholder="Rentre ici la description"></textarea>
               </div>
             </div>
             <br>
             <div id="success"></div>
             <div class="form-group">
-              <input type="submit" class="btn btn-primary" value="Ajouter l'utilisateur" name="formsend">
+              <input type="submit" class="btn btn-primary" value="Ajouter l'article" name="formsend">
             </div>
           </form>
         </div>
@@ -152,37 +144,30 @@
    
     if(isset($_POST['formsend'])){
      extract($_POST);
-     if(!empty($name) && !empty($firstname) && !empty($email) && !empty($password) && !empty($validation_password)){
+      if(!empty($title) && !empty($subtitle) && !empty($category) && !empty($description)){
 
-        if($password !== $validation_password){
-          echo 'Mot de passe pas les mêmes';
-        }
-        else {
-          $req=$bdd->prepare("SELECT * FROM user WHERE email = :email");
-          $req->execute(['email'=> $email]);
-          $result = $req -> fetch();
-
-          if($result == false)
-          {    
-            $q=$bdd->prepare('INSERT INTO user(name, firstname, email, password, type) VALUES(:name, :firstname, :email, :password, :type)');
+        $req=$bdd->prepare("SELECT * FROM user WHERE email = :email");
+        $req->execute(['email'=> $_SESSION['email']]);
+        $result = $req -> fetch();
+        if($result == true){    
+          $q=$bdd->prepare('INSERT INTO articles(title, description, id_user, post_text, category) VALUES(:title, :description, :id_user, :post_text, :category)');
               
-            $q->execute(array(
-              'name' => $name,
-              'firstname' => $firstname,
-              'email' => $email,
-              'password' => sha1($password),
-              'type' => 'user' 
-            ));
-            echo'<h2> Vous avez ajouté '.$name.' '.$firstname.'!</h2>';
-          }
+          $q->execute(array(
+            'title' => $title,
+            'description' => $subtitle,
+            'id_user' => $_SESSION['id'],
+            'post_text' => $description,
+            'category' => $category
+          ));
+          echo'<h2> Vous avez ajouté !</h2>';
+        }
                                 
-          else if($result == true) {  
-            echo '<h2>L\'email est déjà attribué, veuillez en mettre un autre.</h2>';
-          } 
+        else if($result == false) {  
+          echo '<h2> oui </h2>';
+        } 
        
-          else {
-            echo '';
-          }
+        else {
+          echo '';
         }
       }
 

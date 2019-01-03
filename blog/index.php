@@ -99,7 +99,7 @@
         while($row = $request -> fetch()){
           echo'
                 <div class="post-preview">
-                  <a href="post.html">
+                  <a href="post.php?id_article='.$row['id_article'].'">
                     <h2 class="post-title">'.$row['title'].'</h2>
                     <h3 class="post-subtitle">'.$row['description'].'</h3>
                    </a>
