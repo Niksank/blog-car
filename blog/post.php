@@ -121,7 +121,7 @@ else
       if($_SESSION['type'] == 'superuser'){
         echo' 
     <div>
-      <a class="btn btn-primary float-left" href="#">Modifier l\'article</a>
+      <a class="btn btn-primary float-left" href="pages/update-article.php?id_article='.$_GET['id_article'].'">Modifier l\'article</a>
     </div>
 
     <div>

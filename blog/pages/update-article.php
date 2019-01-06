@@ -14,6 +14,11 @@
     session_destroy();
     header('Location: ../login.php');
   }
+
+  $req=$bdd->prepare("SELECT * FROM articles WHERE id_article = :id_article");
+  $req->execute(['id_article'=> $_GET['id_article']]);
+  $article = $req -> fetch();
+
 ?>
 
 <!DOCTYPE html>
@@ -42,7 +47,7 @@
   </head>
 
   <body>
-	<!-- Navigation -->
+  <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
         <a class="navbar-brand" href="index.php">
@@ -77,7 +82,7 @@
           </ul>
         </div>
       </div>
-    </nav>	  
+    </nav>    
     <!-- Page Header -->
     <header class="masthead" style="background-image: url('../img/contact-bg.jpg')">
       <div class="overlay"></div>
@@ -85,8 +90,8 @@
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="page-heading">
-              <h1>Ajouter un article</h1>
-              <span class="subheading"> </span>
+              <h1>Mettre à jour un article</h1>
+              <span class="subheading"> Cliquer ou il faut modifier et remplacer </span>
             </div>
           </div>
         </div>
@@ -103,34 +108,34 @@
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
                 <label>Titre</label>
-                <input name="title" type="text" class="form-control" placeholder="Titre" id="title" required data-validation-required-message="Veuillez rentrer votre nom">
+                <input name="title" type="text" class="form-control" value="<?php echo $article['title']; ?>" id="title" required data-validation-required-message="Veuillez rentrer votre nom">
                 <p class="help-block text-danger"></p>
               </div> 
             </div>
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
                 <label>Sous-titre</label>
-                <input type="text" name="subtitle" class="form-control" placeholder="Sous-titre" id="subtitle" required data-validation-required-message="Veuillez rentrer votre prénom">
+                <input type="text" name="subtitle" class="form-control" value="<?php echo $article['description']; ?>" id="subtitle" required data-validation-required-message="Veuillez rentrer votre prénom">
                 <p class="help-block text-danger"></p>
               </div> 
             </div>
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
                 <label>Categorie</label>
-                <input type="text" name="category" class="form-control" placeholder="Categorie" id="category" required data-validation-required-message="Veuillez rentrer la categorie">
+                <input type="text" name="category" class="form-control" value="<?php echo $article['category']; ?>" id="category" required data-validation-required-message="Veuillez rentrer la categorie">
                 <p class="help-block text-danger"></p>
               </div>
             </div>
             <div class="control-group">
               <div class="form-group col-xs-12 floating-label-form-group controls">
                 <label>Description</label>
-                <textarea name="description" id="description" class="form-control" cols="40" rows="5" placeholder="Rentre ici la description"></textarea>
+                <textarea name="description" id="description" class="form-control" cols="40" rows="5" value="<?php echo $article['post_text']; ?>"></textarea>
               </div>
             </div>
             <br>
             <div id="success"></div>
             <div class="form-group">
-              <input type="submit" class="btn btn-primary" value="Ajouter l'article" name="formsend">
+              <input type="submit" class="btn btn-primary" value="Mettre à jour l'article" name="formsend">
             </div>
           </form>
         </div>
@@ -142,26 +147,25 @@
    
     if(isset($_POST['formsend'])){
      extract($_POST);
-      if(!empty($title) && !empty($subtitle) && !empty($category) && !empty($description)){
+      if(!empty($title) || !empty($subtitle) || !empty($category) || !empty($description)){
 
         $req=$bdd->prepare("SELECT * FROM user WHERE email = :email");
         $req->execute(['email'=> $_SESSION['email']]);
         $result = $req -> fetch();
         if($result == true){    
-          $q=$bdd->prepare('INSERT INTO articles(title, description, id_user, post_text, category) VALUES(:title, :description, :id_user, :post_text, :category)');
+          $q=$bdd->prepare('UPDATE articles SET title = :title, description = :description, post_text = :post_text, category = :category');
               
           $q->execute(array(
             'title' => $title,
             'description' => $subtitle,
-            'id_user' => $_SESSION['id'],
             'post_text' => $description,
             'category' => $category
           ));
-          echo'<h2> Vous avez ajouté !</h2>';
+          echo'<h2> Vous avez modifié !</h2>';
         }
                                 
         else if($result == false) {  
-          echo '<h2> oui </h2>';
+          echo '<h2> Probleme email </h2>';
         } 
        
         else {
