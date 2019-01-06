@@ -94,7 +94,7 @@
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
         <?php
-        $request = $bdd -> prepare("SELECT * FROM articles INNER JOIN user ON articles.id_user = user.id WHERE id_user = :id_user");
+        $request = $bdd -> prepare("SELECT * FROM articles INNER JOIN user ON articles.id_user = user.id WHERE id_user = :id_user LIMIT 5" );
         $request -> execute(['id_user' => $_SESSION['id']]);
         while($row = $request -> fetch()){
           echo'

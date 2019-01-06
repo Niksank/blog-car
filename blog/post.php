@@ -117,39 +117,24 @@ else
     </article>
 
     <hr>
+   <?php 
+      if($_SESSION['type'] == 'superuser'){
+        echo' 
+    <div>
+      <a class="btn btn-primary float-left" href="#">Modifier l\'article</a>
+    </div>
 
+    <div>
+      <a class="btn btn-primary float-right" href="pages/delete-article.php?id_article='.$_GET['id_article'].'"> Supprimer l\'article</a>
+    </div>';  
+        }
+    ?> 
     <!-- Footer -->
     <footer>
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
-            <ul class="list-inline text-center">
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fas fa-circle fa-stack-2x"></i>
-                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fas fa-circle fa-stack-2x"></i>
-                    <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fas fa-circle fa-stack-2x"></i>
-                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-            </ul>
-            <p class="copyright text-muted">Copyright &copy; Your Website 2018</p>
+            <p class="copyright text-muted"> @PROJECT MDS MYSQL</p>
           </div>
         </div>
       </div>

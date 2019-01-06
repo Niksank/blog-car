@@ -100,18 +100,19 @@
         <div class="col-lg-8 col-md-10 mx-auto">
         
           <!-- Pager -->
-          <div class="add-article">
-            <a class="btn btn-primary float-left" href="pages/add-article.php"> Ajouter un article </a>
+          <div class="find-user">
+            <a class="btn btn-primary float-left" href="pages/find-user.php"> Trouver un utilisateur </a>
           </div>
           <div class="clearfix add-user">
             <a class="btn btn-primary float-right" href="pages/add-user.php"> Ajouter un utilisateur </a>
           </div> </br>
-          <div class="find-user">
-            <a class="btn btn-primary float-left" href="pages/find-user.php"> Trouver un utilisateur </a>
+          <div class="add-article">
+            <a class="btn btn-primary float-left" href="pages/add-article.php"> Ajouter un article </a>
           </div>
           <div class="clearfix find-article">
             <a class="btn btn-primary float-right" href="pages/find-article.php"> Trouver un article </a>
           </div>
+          
         </div>
       </div>
     </div>

@@ -45,7 +45,7 @@
 	<!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
-        <a class="navbar-brand" href="index.php">
+        <a class="navbar-brand" href="../index.php">
         Auto Blog
         </a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,19 +79,6 @@
       </div>
     </nav>	  
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url('../img/contact-bg.jpg')">
-      <div class="overlay"></div>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 col-md-10 mx-auto">
-            <div class="page-heading">
-              <h1>Ajouter un article</h1>
-              <span class="subheading"> </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
 
     <!-- Main Content -->
     <div class="container">
@@ -101,39 +88,20 @@
           <!-- Contact Form - Enter your email address on line 19 of the mail/contact_me.php file to make this form work. -->
           <!-- WARNING: Some web hosts do not allow emails to be sent through forms to common mail hosts like Gmail or Yahoo. It's recommended that you use a private domain email address! -->
           <!-- To use the contact form, your site must be on a live web host with PHP! The form will not work locally! -->
-          <form method="post" novalidate>
+          <form method="post">
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
-                <label>Titre</label>
-                <input name="title" type="text" class="form-control" placeholder="Titre" id="title" required data-validation-required-message="Veuillez rentrer votre nom">
+                <label>Supprimer l'article</label>
+                <input type="password" name="password" class="form-control" placeholder="Rentrez votre mot de passe pour supprimer l'article" id="password" required data-validation-required-message="Veuillez rentrer votre mot de passe">
                 <p class="help-block text-danger"></p>
-              </div> 
-            </div>
-            <div class="control-group">
-              <div class="form-group floating-label-form-group controls">
-                <label>Sous-titre</label>
-                <input type="text" name="subtitle" class="form-control" placeholder="Sous-titre" id="subtitle" required data-validation-required-message="Veuillez rentrer votre prénom">
-                <p class="help-block text-danger"></p>
-              </div> 
-            </div>
-            <div class="control-group">
-              <div class="form-group floating-label-form-group controls">
-                <label>Categorie</label>
-                <input type="text" name="category" class="form-control" placeholder="Categorie" id="category" required data-validation-required-message="Veuillez rentrer la categorie">
-                <p class="help-block text-danger"></p>
-              </div>
-            </div>
-            <div class="control-group">
-              <div class="form-group col-xs-12 floating-label-form-group controls">
-                <label>Description</label>
-                <textarea name="description" id="description" class="form-control" cols="40" rows="5" placeholder="Rentre ici la description"></textarea>
               </div>
             </div>
             <br>
             <div id="success"></div>
             <div class="form-group">
-              <input type="submit" class="btn btn-primary" value="Ajouter l'article" name="formsend">
+              <input type="submit" class="btn btn-primary" value="Supprimer l'article" name="formsend">
             </div>
+            
           </form>
         </div>
       </div>
@@ -143,32 +111,26 @@
     <?php
    
     if(isset($_POST['formsend'])){
-     extract($_POST);
-      if(!empty($title) && !empty($subtitle) && !empty($category) && !empty($description)){
+      extract($_POST);
+      if(!empty($password)){
 
-        $req=$bdd->prepare("SELECT * FROM user WHERE email = :email");
+        $req=$bdd->prepare("SELECT password FROM user WHERE email = :email");
         $req->execute(['email'=> $_SESSION['email']]);
         $result = $req -> fetch();
-        if($result == true){    
-          $q=$bdd->prepare('INSERT INTO articles(title, description, id_user, post_text, category) VALUES(:title, :description, :id_user, :post_text, :category)');
-              
+
+        if($result['password'] == sha1($password))
+        {    
+          $q=$bdd->prepare('DELETE FROM articles WHERE id_article = :id_article ');
           $q->execute(array(
-            'title' => $title,
-            'description' => $subtitle,
-            'id_user' => $_SESSION['id'],
-            'post_text' => $description,
-            'category' => $category
+            'id_article' => $_GET['id_article']
           ));
-          echo'<h2> Vous avez ajouté !</h2>';
+          echo'<h1> Vous avez supprimé l\'article !</h1>';
+          header('Location: ../index.php'); 
         }
-                                
-        else if($result == false) {  
-          echo '<h2> oui </h2>';
-        } 
-       
+
         else {
-          echo '';
-        }
+          echo '<h1>Mot de passe incorrecte</h1>';
+        }        
       }
 
       else{
