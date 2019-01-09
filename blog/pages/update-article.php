@@ -129,7 +129,7 @@
             <div class="control-group">
               <div class="form-group col-xs-12 floating-label-form-group controls">
                 <label>Description</label>
-                <textarea name="description" id="description" class="form-control" cols="40" rows="5" value="<?php echo $article['post_text']; ?>"></textarea>
+                <textarea name="description" id="description" class="form-control" cols="40" rows="5" placeholder=""> <?php echo $article['post_text']; ?></textarea>
               </div>
             </div>
             <br>
