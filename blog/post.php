@@ -10,13 +10,11 @@
     header('Location: login.php');
   }
 
-  if (isset($_GET['id_article'])) 
-{
-}
-else 
-{
-  echo 'Renseigner le id de l\'article';
-}
+  if (isset($_GET['id_article'])) {
+  }
+  else {
+    echo 'Renseigner le id de l\'article';
+  }
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -32,6 +30,7 @@ else
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/comment-box.css" rel="stylesheet">
 
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -86,6 +85,7 @@ else
     $request = $bdd -> prepare("SELECT * FROM articles INNER JOIN user ON articles.id_user = user.id WHERE id_article = :id_article");
     $request -> execute(['id_article' => $_GET['id_article']]);
     $result = $request -> fetch();  
+    $request -> closeCursor();
   ?>
 
     <header class="masthead" style="background-image: url('img/post-bg.jpg')">
@@ -129,6 +129,78 @@ else
     </div>';  
         }
     ?> 
+
+<!-- Comment box -->
+    <div class="container pb-cmnt-container">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3 col-xl-12">
+            <div class="panel panel-info">
+                <div class="panel-body">
+                  <form method="post" class="form-inline">
+                    <textarea name="comment" placeholder="Laisse un commentaire ! ;)" class="pb-cmnt-textarea"></textarea>
+                    
+                        <input type="submit" class="btn btn-primary" value="Envoyer" name="formsend">
+                    </form>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <?php
+      if(isset($_POST['formsend'])){
+        extract($_POST);
+        if(!empty($comment)){
+          $req=$bdd->prepare("SELECT * FROM user WHERE email = :email");
+          $req->execute(['email'=> $_SESSION['email']]);
+          $result = $req -> fetch();
+          if($result == true){    
+            $q=$bdd->prepare('INSERT INTO comments(comment, id_user, id_article) VALUES(:comment, :id_user, :id_article)');
+                
+            $q->execute(array(
+              'comment' => $comment,
+              'id_user' => $_SESSION['id'],
+              'id_article' => $_GET['id_article']
+            ));
+            echo'<h2> Vous avez ajouté !</h2>';
+          }
+        }
+        else{ echo'erreur';}
+      }
+    ?>
+<!-- /Comment box -->
+    <hr>
+    <!-- /All comment -->
+    <div class="container">
+      <div class="row">
+        <h1> Commentaires </h1> 
+        <?php
+          $request = $bdd -> prepare("SELECT * FROM comments INNER JOIN user ON comments.id_user = user.id WHERE id_article = :id_article");
+          $request -> execute(['id_article' => $_GET['id_article']]);
+          while($row = $request -> fetch()){
+            echo'
+        <div class="col-sm-8 col-xl-12">
+          <div class="panel panel-white post panel-shadow">
+            <div class="post-heading">
+              <div class="pull-left meta">
+                <div class="title h5">
+                  <img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar" alt="user profile image">
+                  <b>'.$row['name'].' '.$row['firstname'].'</b>
+                  <h6 class="text-muted time" style="float: right;">1 minute ago</h6>
+                </div>
+              </div>
+            </div> 
+            <div class="post-description"> 
+              <p>'.$row['comment'].'</p>
+            </div>
+          </div>
+        </div>';
+          }
+        ?>
+        
+
+      </div>
+    </div>   
     <!-- Footer -->
     <footer>
       <div class="container">

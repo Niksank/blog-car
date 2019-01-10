@@ -161,7 +161,7 @@
         }
                                 
         else if($result == false) {  
-          echo '<h2> oui </h2>';
+          echo '<h2> Connectez vous </h2>';
         } 
        
         else {

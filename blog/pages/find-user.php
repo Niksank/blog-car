@@ -104,18 +104,17 @@
         <?php
         if(isset($_POST['form'])) {
           extract($_POST);
-          $request = $bdd -> prepare("SELECT * FROM articles INNER JOIN user ON articles.id_user = user.id WHERE title LIKE :word OR description LIKE :word OR post_text LIKE :word ");
+          $request = $bdd -> prepare("SELECT * FROM user WHERE email LIKE :word OR name LIKE :word OR firstname LIKE :word ");
           $request -> execute(['word' => '%'.$search.'%']);
 
           while($row = $request -> fetch()){
             echo'
                   <div class="post-preview">
-                    <a href="../post.php?id_article='.$row['id_article'].'">
-                      <h2 class="post-title">'.$row['title'].'</h2>
-                      <h3 class="post-subtitle">'.$row['description'].'</h3>
+                      <h2 class="post-title">'.$row['id'].'</h2>
+                      <h3 class="post-subtitle">'.$row['name'].'</h3>
                      </a>
                     <p class="post-meta">Publié par
-                    <a href="#">'.$row['name'].' </a> le '.$row['date'].'</p>
+                    <a href="#">'.$row['firstname'].' </a> le '.$row['email'].'</p>
                   </div>
                   <hr>';
             $request -> closeCursor();      
