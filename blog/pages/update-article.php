@@ -153,13 +153,14 @@
         $req->execute(['email'=> $_SESSION['email']]);
         $result = $req -> fetch();
         if($result == true){    
-          $q=$bdd->prepare('UPDATE articles SET title = :title, description = :description, post_text = :post_text, category = :category');
+          $q=$bdd->prepare('UPDATE articles SET title = :title, description = :description, post_text = :post_text, category = :category WHERE id_article = :id_article');
               
           $q->execute(array(
             'title' => $title,
             'description' => $subtitle,
             'post_text' => $description,
-            'category' => $category
+            'category' => $category,
+            'id_article' => $_GET['id_article']
           ));
           echo'<h2> Vous avez modifié !</h2>';
         }

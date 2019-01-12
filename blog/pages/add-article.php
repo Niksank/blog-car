@@ -127,6 +127,13 @@
                 <textarea name="description" id="description" class="form-control" cols="40" rows="5" placeholder="Rentre ici la description"></textarea>
               </div>
             </div>
+            <div class="control-group">
+              <div class="form-group floating-label-form-group controls">
+                <label>Images</label>
+                <input type="text" name="image" class="form-control" placeholder="Lien d'image" id="image" required data-validation-required-message="Veuillez mettre un lien d'image">
+                <p class="help-block text-danger"></p>
+              </div>
+            </div>
             <br>
             <div id="success"></div>
             <div class="form-group">
@@ -142,20 +149,21 @@
    
     if(isset($_POST['formsend'])){
      extract($_POST);
-      if(!empty($title) && !empty($subtitle) && !empty($category) && !empty($description)){
+      if(!empty($title) && !empty($subtitle) && !empty($category)  && !empty($description) && !empty($image)){
 
         $req=$bdd->prepare("SELECT * FROM user WHERE email = :email");
         $req->execute(['email'=> $_SESSION['email']]);
         $result = $req -> fetch();
         if($result == true){    
-          $q=$bdd->prepare('INSERT INTO articles(title, description, id_user, post_text, category) VALUES(:title, :description, :id_user, :post_text, :category)');
+          $q=$bdd->prepare('INSERT INTO articles(title, description, id_user, post_text, category, image) VALUES(:title, :description, :id_user, :post_text, :category, :image)');
               
           $q->execute(array(
             'title' => $title,
             'description' => $subtitle,
             'id_user' => $_SESSION['id'],
             'post_text' => $description,
-            'category' => $category
+            'category' => $category,
+            'image' => $image
           ));
           echo'<h2> Vous avez ajouté !</h2>';
         }

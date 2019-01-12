@@ -88,14 +88,14 @@
     $request -> closeCursor();
   ?>
 
-    <header class="masthead" style="background-image: url('img/post-bg.jpg')">
+    <header class="masthead" style="background-image: url('<?php echo $result['image'];?>')">
       <div class="overlay"></div>
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="post-heading">
               <h1><?php echo $result['title']?></h1>
-              <h2 class="subheading"><?php echo $result['description']?></h2>
+              <h2 class="subheading"><?php echo $result['description'];?></h2>
               <span class="meta">Publié par
                 <a href="#"><?php echo $result['name']?></a>
                 le <?php echo $result['date']?></span>

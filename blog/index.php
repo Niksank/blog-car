@@ -95,7 +95,7 @@
         <div class="col-lg-8 col-md-10 mx-auto">
 
         <?php
-        $request = $bdd -> prepare("SELECT * FROM articles INNER JOIN user ON articles.id_user = user.id  LIMIT 5" );
+        $request = $bdd -> prepare("SELECT id_article, title, description, name, date FROM articles INNER JOIN user ON articles.id_user = user.id  LIMIT 5" );
         $request -> execute();
         while($row = $request -> fetch()){
           echo'

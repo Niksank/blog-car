@@ -104,7 +104,7 @@
         <?php
         if(isset($_POST['form'])) {
           extract($_POST);
-          $request = $bdd -> prepare("SELECT * FROM articles INNER JOIN user ON articles.id_user = user.id WHERE title LIKE :word OR description LIKE :word OR post_text LIKE :word ");
+          $request = $bdd -> prepare("SELECT * FROM articles INNER JOIN user ON articles.id_user = user.id WHERE title LIKE :word OR description LIKE :word OR post_text LIKE :word OR category LIKE :word");
           $request -> execute(['word' => '%'.$search.'%']);
 
           while($row = $request -> fetch()){
@@ -117,9 +117,9 @@
                     <p class="post-meta">Publié par
                     <a href="#">'.$row['name'].' </a> le '.$row['date'].'</p>
                   </div>
-                  <hr>';
-            $request -> closeCursor();      
+                  <hr>';   
           }
+          $request -> closeCursor();  
         } 
         ?>
         </div>
