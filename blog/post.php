@@ -192,6 +192,7 @@
             </div> 
             <div class="post-description"> 
               <p>'.$row['comment'].'</p>
+              <div class="stats" id="'.$row['id_comment'].'" style="float: right;"><a href="pages/delete-comment.php?id_comment='.$row['id_comment'].'&id='.$_SESSION['id'].'" class="btn btn-default stat-item"> <img src="https://vignette.wikia.nocookie.net/starters/images/8/8c/Delete.png/revision/latest?cb=20140204025034&format=original" style="width:20px;height:20px;"></img></a> <a href="pages/update-comment.php?id_comment='.$row['id_comment'].'&id='.$row['id'].'&id_article='.$_GET['id_article'].'" class="btn btn-default stat-item"> <img src="https://img.icons8.com/metro/1600/edit.png" style="width:20px;height:20px;"></img></a></div>
             </div>
           </div>
         </div>';
