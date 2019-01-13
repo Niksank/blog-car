@@ -120,11 +120,20 @@
 
         if($result['password'] == sha1($password))
         {    
+          $q=$bdd->prepare('DELETE FROM comments WHERE id_article = :id_article ');
+          $q->execute(array(
+            'id_article' => $_GET['id_article']
+          ));
+          $q->closeCursor();
+          
           $q=$bdd->prepare('DELETE FROM articles WHERE id_article = :id_article ');
           $q->execute(array(
             'id_article' => $_GET['id_article']
           ));
-          echo'<h1> Vous avez supprimé l\'article !</h1>';
+          $q->closeCursor();
+          $req->closeCursor();
+
+          
           header('Location: ../index.php'); 
         }
 
