@@ -22,20 +22,14 @@
 
     <title> CAR BLOG </title>
 
-
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-
     <link href="../css/clean-blog.min.css" rel="stylesheet">
-
   </head>
 
   <body>
-
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
@@ -61,7 +55,6 @@
             </li>';  
               }
             ?>
-           
             <li class="nav-item">
               <a class="nav-link" href="../account.php">Mon compte</a>
             </li>
@@ -98,24 +91,28 @@
             </div>
             <br>
             <div class="form-group">
+              <a href="../admin.php" class="btn btn-primary">Retour</a>
               <input type="submit" class="btn btn-primary" value="Rechercher" name="form">
             </div>
           </form>  
         <?php
         if(isset($_POST['form'])) {
           extract($_POST);
-          $request = $bdd -> prepare("SELECT * FROM user WHERE email LIKE :word OR name LIKE :word OR firstname LIKE :word ");
+          $request = $bdd -> prepare("SELECT id, name, firstname, email FROM user WHERE email LIKE :word OR name LIKE :word OR firstname LIKE :word ");
           $request -> execute(['word' => '%'.$search.'%']);
 
           while($row = $request -> fetch()){
             echo'
-                  <div class="post-preview">
-                      <h2 class="post-title">'.$row['id'].'</h2>
-                      <h3 class="post-subtitle">'.$row['name'].'</h3>
-                     </a>
-                    <p class="post-meta">Publié par
-                    <a href="#">'.$row['firstname'].' </a> le '.$row['email'].'</p>
-                  </div>
+                  <div class="card text-center">
+            <div class="card-header">
+              '.$row['name'].' '.$row['firstname'].'
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">'.$row['email'].'</h5>
+              <a href="update-user.php?id='.$row['id'].'" class="btn btn-primary">Modifier</a>
+              <a href="#" class="btn btn-primary">Supprimer</a>
+            </div>
+          </div>
                   <hr>';
             $request -> closeCursor();      
           }
@@ -140,8 +137,6 @@
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Custom scripts for this template -->
     <script src="js/clean-blog.min.js"></script>
 
   </body>

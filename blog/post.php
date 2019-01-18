@@ -17,10 +17,9 @@
   }
 ?>
 <!DOCTYPE html>
+
 <html lang="fr">
-
   <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -36,14 +35,10 @@
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-
-    <!-- Custom styles for this template -->
     <link href="css/clean-blog.min.css" rel="stylesheet">
-
   </head>
 
   <body>
-
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
@@ -105,7 +100,6 @@
       </div>
     </header>
 
-
     <article>
       <div class="container">
         <div class="row">
@@ -156,7 +150,6 @@
           $result = $req -> fetch();
           if($result == true){    
             $q=$bdd->prepare('INSERT INTO comments(comment, id_user, id_article) VALUES(:comment, :id_user, :id_article)');
-                
             $q->execute(array(
               'comment' => $comment,
               'id_user' => $_SESSION['id'],
@@ -173,35 +166,15 @@
     <!-- /All comment -->
     <div class="container">
       <div class="row">
+        <div class="col-md-6 col-md-offset-3 col-xl-12">
         <h1> Commentaires </h1> 
-        <?php
-          $request = $bdd -> prepare("SELECT * FROM comments INNER JOIN user ON comments.id_user = user.id WHERE id_article = :id_article");
-          $request -> execute(['id_article' => $_GET['id_article']]);
-          while($row = $request -> fetch()){
-            echo'
-        <div class="col-sm-8 col-xl-12">
-          <div class="panel panel-white post panel-shadow">
-            <div class="post-heading">
-              <div class="pull-left meta">
-                <div class="title h5">
-                  <img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar" alt="user profile image">
-                  <b>'.$row['name'].' '.$row['firstname'].'</b>
-                  <h6 class="text-muted time" style="float: right;">1 minute ago</h6>
-                </div>
-              </div>
-            </div> 
-            <div class="post-description"> 
-              <p>'.$row['comment'].'</p>
-              <div class="stats" id="'.$row['id_comment'].'" style="float: right;"><a href="pages/delete-comment.php?id_comment='.$row['id_comment'].'&id='.$_SESSION['id'].'" class="btn btn-default stat-item"> <img src="https://vignette.wikia.nocookie.net/starters/images/8/8c/Delete.png/revision/latest?cb=20140204025034&format=original" style="width:20px;height:20px;"></img></a> <a href="pages/update-comment.php?id_comment='.$row['id_comment'].'&id='.$row['id'].'&id_article='.$_GET['id_article'].'" class="btn btn-default stat-item"> <img src="https://img.icons8.com/metro/1600/edit.png" style="width:20px;height:20px;"></img></a></div>
-            </div>
-          </div>
-        </div>';
-          }
-        ?>
-        
-
       </div>
-    </div>   
+        <?php
+        include 'pages/comment.php';
+        ?>
+      </div>
+    </div>
+
     <!-- Footer -->
     <footer>
       <div class="container">
@@ -216,10 +189,7 @@
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Custom scripts for this template -->
     <script src="js/clean-blog.min.js"></script>
 
   </body>
-
 </html>

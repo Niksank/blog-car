@@ -6,40 +6,46 @@
       include '../bdd/database.php';
       global $bdd;  
     }
+    else{
+      header('Location: ../index.php');
+    } 
   }
   else if(!isset($_SESSION['email'])){
     session_destroy();
     header('Location: ../login.php');
   }
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
+
   <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title> CAR BLOG </title>
+    <title>Blog Car</title>
 
-
+    <!-- Bootstrap core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-
+    <!-- Custom fonts for this template -->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
+    <!-- Custom styles for this template -->
     <link href="../css/clean-blog.min.css" rel="stylesheet">
 
   </head>
 
   <body>
-
-    <!-- Navigation -->
+	<!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
-        <a class="navbar-brand" href="index.php">
+        <a class="navbar-brand" href="../index.php">
         Auto Blog
         </a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,91 +67,101 @@
             </li>';  
               }
             ?>
-           
+
             <li class="nav-item">
               <a class="nav-link" href="../account.php">Mon compte</a>
             </li>
-             <li class="nav-item">
+            <li class="nav-item">
               <a class="nav-link" href="../logout.php">Deconnexion</a>
             </li>
           </ul>
         </div>
       </div>
-    </nav>
-
-    <header class="masthead" style="background-image: url('../img/post-bg.jpg')">
+    </nav>	  
+    <!-- Page Header -->
+ <header class="masthead" style="background-image: url('../img/contact-bg.jpg')">
       <div class="overlay"></div>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 col-md-10">
-            <div class="post-heading">s
-            </div>
-          </div>
-        </div>
       </div>
     </header>
-
-    <!-- body -->
+    <!-- Main Content -->
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <form method="post">
+          <form method="post"  novalidate>
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
-                <label>Rechercher</label>
-                <input name="search" type="text" class="form-control" placeholder="Entrez ce que vous rechercher" id="search">
-              </div> 
+                <label>Supprimer l'article</label>
+                <input type="password" name="password" class="form-control" placeholder="Rentrez votre mot de passe pour supprimer earticle" id="password">
+              </div>
             </div>
             <br>
+            <div id="success"></div>
             <div class="form-group">
-              <a href="../admin.php" class="btn btn-primary">Retour</a>
-              <input type="submit" class="btn btn-primary" value="Rechercher" name="form">
+              <input type="submit" class="btn btn-primary" value="Supprimer l'article" name="formsend">
             </div>
-          </form>  
-        <?php
-        if(isset($_POST['form'])) {
-          extract($_POST);
-          $request = $bdd -> prepare("SELECT * FROM articles INNER JOIN user ON articles.id_user = user.id WHERE title LIKE :word OR description LIKE :word OR post_text LIKE :word OR category LIKE :word");
-          $request -> execute(['word' => '%'.$search.'%']);
-
-          while($row = $request -> fetch()){
-            echo'
-                  <div class="post-preview">
-                    <a href="../post.php?id_article='.$row['id_article'].'">
-                      <h2 class="post-title">'.$row['title'].'</h2>
-                      <h3 class="post-subtitle">'.$row['description'].'</h3>
-                     </a>
-                    <p class="post-meta">Publié par
-                    <a href="#">'.$row['name'].' </a> le '.$row['date'].'</p>
-                  </div>
-                  <hr>';   
-          }
-          $request -> closeCursor();  
-        } 
-        ?>
+            
+          </form>
         </div>
-      </div> 
-    </div>
-          
-        
+      </div>
+    </div> 
+
+    <hr>
+    <?php
+    if(isset($_POST['formsend'])){
+      extract($_POST);
+      if(!empty($password)){
+
+        $req=$bdd->prepare("SELECT id, password, id_comment, email FROM user INNER JOIN comments ON user.id = comments.id_user WHERE id = :id AND id_comment = :id_comment ");
+        $req->execute([
+          'id'=> $_GET['id'],
+          'id_comment' => $_GET['id_comment']
+        ]);
+        $result = $req -> fetch();
+
+        if($result == true){
+          if($result['password'] == sha1($password))
+          {    
+            $delComment=$bdd->prepare('DELETE FROM comments WHERE id_comment = :id_comment');
+            $delComment->execute(array(
+              'id_comment' => $_GET['id_comment']
+            ));
+            $delComment->closeCursor();
+            header('Location: ../index.php'); 
+          }
+
+          else {
+            echo '<h1>Mot de passe incorrecte</h1>';
+          } 
+        }
+        //The comment doesn't belong to the user
+        else{
+          echo'Ceci n\'est pas votre commentaire';
+        }
+      }
+
+      else{
+        echo'<h2>Remplir tous les champs</h2>';
+      }
+    } 
+    ?>
     <!-- Footer -->
     <footer>
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
-            <p class="copyright text-muted"> @PROJECT MDS MYSQL</p>
+            <p class="copyright text-muted">@MDS PROJECT SQL</p>
           </div>
         </div>
       </div>
     </footer>
 
     <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Custom scripts for this template -->
-    <script src="js/clean-blog.min.js"></script>
-
+    <!-- Contact Form JavaScript -->
+    <script src="../js/jqBootstrapValidation.js"></script>
+    <script src="../js/contact_me.js"></script>
+    <script src="../js/clean-blog.min.js"></script>
   </body>
-
 </html>
