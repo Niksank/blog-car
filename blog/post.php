@@ -156,6 +156,8 @@
               'id_article' => $_GET['id_article']
             ));
             echo'<h2> Vous avez ajouté !</h2>';
+            
+            $q->closeCursor();
           }
         }
         else{ echo'erreur';}

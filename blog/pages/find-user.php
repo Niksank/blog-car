@@ -110,7 +110,7 @@
             <div class="card-body">
               <h5 class="card-title">'.$row['email'].'</h5>
               <a href="update-user.php?id='.$row['id'].'" class="btn btn-primary">Modifier</a>
-              <a href="#" class="btn btn-primary">Supprimer</a>
+              <a href="delete-user.php?id_user='.$row['id'].'" class="btn btn-primary">Supprimer</a>
             </div>
           </div>
                   <hr>';

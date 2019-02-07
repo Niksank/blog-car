@@ -1,9 +1,14 @@
 <?php
   session_start();
   if(isset($_SESSION['email'])){
-    $id = $_SESSION['id'];
-    include '../bdd/database.php';
-    global $bdd;  
+    if($_SESSION['type'] == 'superuser'){
+      $id = $_SESSION['id'];
+      include '../bdd/database.php';
+      global $bdd;  
+    }
+    else{
+      header('Location: ../index.php');
+    } 
   }
   else if(!isset($_SESSION['email'])){
     session_destroy();
@@ -62,11 +67,11 @@
             </li>';  
               }
             ?>
-
+           
             <li class="nav-item">
               <a class="nav-link" href="../account.php">Mon compte</a>
             </li>
-            <li class="nav-item">
+             <li class="nav-item">
               <a class="nav-link" href="../logout.php">Deconnexion</a>
             </li>
           </ul>
@@ -74,25 +79,27 @@
       </div>
     </nav>	  
     <!-- Page Header -->
- <header class="masthead" style="background-image: url('../img/contact-bg.jpg')">
-      <div class="overlay"></div>
-      </div>
-    </header>
+
     <!-- Main Content -->
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <form method="post"  novalidate>
+          <p></p>
+          <!-- Contact Form - Enter your email address on line 19 of the mail/contact_me.php file to make this form work. -->
+          <!-- WARNING: Some web hosts do not allow emails to be sent through forms to common mail hosts like Gmail or Yahoo. It's recommended that you use a private domain email address! -->
+          <!-- To use the contact form, your site must be on a live web host with PHP! The form will not work locally! -->
+          <form method="post">
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
                 <label>Supprimer l'article</label>
-                <input type="password" name="password" class="form-control" placeholder="Rentrez votre mot de passe pour supprimer earticle" id="password">
+                <input type="password" name="password" class="form-control" placeholder="Rentrez votre mot de passe pour supprimer l'article" id="password" required data-validation-required-message="Veuillez rentrer votre mot de passe">
+                <p class="help-block text-danger"></p>
               </div>
             </div>
             <br>
             <div id="success"></div>
             <div class="form-group">
-              <input type="submit" class="btn btn-primary" value="Supprimer l'article" name="formsend">
+              <input type="submit" class="btn btn-primary" value="Supprimer l'utilisateur" name="formsend">
             </div>
             
           </form>
@@ -102,36 +109,42 @@
 
     <hr>
     <?php
+   
     if(isset($_POST['formsend'])){
       extract($_POST);
       if(!empty($password)){
 
-        $req=$bdd->prepare("SELECT id, password, id_comment, email FROM user INNER JOIN comments ON user.id = comments.id_user WHERE id = :id AND id_comment = :id_comment ");
-        $req->execute([
-          'id'=> $_GET['id'],
-          'id_comment' => $_GET['id_comment']
-        ]);
+        $req=$bdd->prepare("SELECT password FROM user WHERE email = :email");
+        $req->execute(['email'=> $_SESSION['email']]);
         $result = $req -> fetch();
 
-        if($result == true){
-          if($result['password'] == sha1($password))
-          {    
-            $delComment=$bdd->prepare('DELETE FROM comments WHERE id_comment = :id_comment');
-            $delComment->execute(array(
-              'id_comment' => $_GET['id_comment']
-            ));
-            $delComment->closeCursor();
-            header('Location: ../index.php'); 
-          }
+        if($result['password'] == sha1($password))
+        {    
+          $q=$bdd->prepare('DELETE FROM comments WHERE id_user = :id_user');
+          $q->execute(array(
+            'id_user' => $_GET['id_user']
+          ));
+          $q->closeCursor();
+          
+          $q=$bdd->prepare('DELETE FROM articles WHERE id_user = :id_user');
+          $q->execute(array(
+            'id_user' => $_GET['id_user']
+          ));
+          $q->closeCursor();
 
-          else {
-            echo '<h1>Mot de passe incorrecte</h1>';
-          } 
+          $q=$bdd->prepare('DELETE FROM user WHERE id = :id_user ');
+          $q->execute(array(
+            'id_user' => $_GET['id_user']
+          ));
+          $q->closeCursor();
+          $req->closeCursor();
+
+          header('Location: ../index.php'); 
         }
-        //The comment doesn't belong to the user
-        else{
-          echo'Ceci n\'est pas votre commentaire';
-        }
+
+        else {
+          echo '<h1>Mot de passe incorrecte</h1>';
+        }        
       }
 
       else{
@@ -157,6 +170,10 @@
     <!-- Contact Form JavaScript -->
     <script src="../js/jqBootstrapValidation.js"></script>
     <script src="../js/contact_me.js"></script>
+
+    <!-- Custom scripts for this template -->
     <script src="../js/clean-blog.min.js"></script>
+
   </body>
+
 </html>
