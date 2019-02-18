@@ -1,14 +1,9 @@
 <?php
   session_start();
   if(isset($_SESSION['email'])){
-    if($_SESSION['type'] == 'superuser'){
-      $id = $_SESSION['id'];
-      include 'bdd/database.php';
-      global $bdd;  
-    }
-    else{
-      header('Location: index.php');
-    }
+    $id = $_SESSION['id'];
+    include 'bdd/database.php';
+    global $bdd;  
   }
   else if(!isset($_SESSION['email'])){
     session_destroy();
@@ -63,7 +58,7 @@
             <?php 
               if($_SESSION['type'] == 'superuser'){
               echo' <li class="nav-item">
-              <a class="nav-link" href="#">Administrateur</a>
+              <a class="nav-link" href="admin.php">Administrateur</a>
             </li>';  
               }
             ?>
@@ -80,14 +75,14 @@
     </nav>
 
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url('http://backgroundcheckall.com/wp-content/uploads/2017/12/admin-background-images-6.jpg')">
+    <header class="masthead" style="background-image: url('img/home-bg.jpg')">
       <div class="overlay"></div>
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
-              <h1>Administrateur</h1>
-              <span class="subheading">Gérer le blog</span>
+              
+              <span class="subheading"></span>
             </div>
           </div>
         </div>
@@ -96,25 +91,29 @@
 
     <!-- Main Content -->
     <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-        
-          <!-- Pager -->
-          <div class="find-user">
-            <a class="btn btn-primary float-left" href="pages/find-user.php"> Trouver un utilisateur </a>
-          </div>
-          <div class="clearfix add-user">
-            <a class="btn btn-primary float-right" href="pages/add-user.php"> Ajouter un utilisateur </a>
-          </div> </br>
-          <div class="add-article">
-            <a class="btn btn-primary float-left" href="pages/add-article.php"> Ajouter un article </a>
-          </div>
-          <div class="clearfix find-article">
-            <a class="btn btn-primary float-right" href="pages/find-article.php"> Trouver un article </a>
-          </div>
-          
-        </div>
-      </div>
+      <?php
+        $request = $bdd -> prepare('SELECT id_article, title, description, name, DATE_FORMAT(date ,"%d/%m/%Y") AS date , article_image FROM articles INNER JOIN user ON articles.id_user = user.id ORDER BY date DESC' );
+        $request -> execute();
+        while($row = $request -> fetch()){
+          echo'
+          <div class="row">
+            <div class="col-sm"><img src="'.$row['article_image'].'" width="350px" height="200px" /></div>
+              <div class="col-8">
+                <div class="post-preview">
+                  <a href="post.php?id_article='.$row['id_article'].'">
+                    <h2 class="post-title">'.$row['title'].'</h2>
+                    <h3 class="post-subtitle">'.$row['description'].'</h3>
+                   </a>
+                  <p class="post-meta">Publié par
+                  <a href="#">'.$row['name'].' </a> le '.$row['date'].'</p>
+                </div>
+              </div>  
+            </div> 
+            <hr>   
+                ';
+        }
+      ?>
+      <!-- Pager -->
     </div>
 
     <hr>

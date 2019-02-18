@@ -155,7 +155,7 @@
         $req->execute(['email'=> $_SESSION['email']]);
         $result = $req -> fetch();
         if($result == true){    
-          $q=$bdd->prepare('INSERT INTO articles(title, description, id_user, post_text, category, image) VALUES(:title, :description, :id_user, :post_text, :category, :image)');
+          $q=$bdd->prepare('INSERT INTO articles(title, description, id_user, post_text, category, article_image) VALUES(:title, :description, :id_user, :post_text, :category, :image)');
               
           $q->execute(array(
             'title' => $title,

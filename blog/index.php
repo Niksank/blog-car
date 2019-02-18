@@ -113,7 +113,7 @@
         ?>
           <!-- Pager -->
           <div class="clearfix">
-            <a class="btn btn-primary float-right" href="#">En voir plus &rarr;</a>
+            <a class="btn btn-primary float-right" href="auto.php">En voir plus &rarr;</a>
           </div>
         </div>
       </div>

@@ -132,6 +132,13 @@
                 <textarea name="description" id="description" class="form-control" cols="40" rows="5" placeholder=""> <?php echo $article['post_text']; ?></textarea>
               </div>
             </div>
+            <div class="control-group">
+              <div class="form-group col-xs-12 floating-label-form-group controls">
+                <label>image</label>
+                <input type="text" name="image" class="form-control" value="<?php echo $article['article_image']; ?>" id="category" required data-validation-required-message="Veuillez rentrer la categorie">
+                <p class="help-block text-danger"></p>
+              </div>
+            </div>
             <br>
             <div id="success"></div>
             <div class="form-group">
@@ -147,19 +154,20 @@
    
     if(isset($_POST['formsend'])){
      extract($_POST);
-      if(!empty($title) || !empty($subtitle) || !empty($category) || !empty($description)){
+      if(!empty($title) || !empty($subtitle) || !empty($category) || !empty($description) || !empty($image) ){
 
         $req=$bdd->prepare("SELECT * FROM user WHERE email = :email");
         $req->execute(['email'=> $_SESSION['email']]);
         $result = $req -> fetch();
         if($result == true){    
-          $q=$bdd->prepare('UPDATE articles SET title = :title, description = :description, post_text = :post_text, category = :category WHERE id_article = :id_article');
+          $q=$bdd->prepare('UPDATE articles SET title = :title, description = :description, post_text = :post_text, category = :category, article_image = :image WHERE id_article = :id_article');
               
           $q->execute(array(
             'title' => $title,
             'description' => $subtitle,
             'post_text' => $description,
             'category' => $category,
+            'image' => $image,
             'id_article' => $_GET['id_article']
           ));
           echo'<h2> Vous avez modifié !</h2>';

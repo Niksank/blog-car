@@ -73,7 +73,7 @@
     </nav>
 
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url('https://wallpapercave.com/wp/BVi34co.jpg')">
+    <header class="masthead" style="background-image: url('https://archive-media-0.nyafuu.org/wg/image/1470/37/1470372074213.jpg')">
       <div class="overlay"></div>
       <div class="container">
         <div class="row">
@@ -149,41 +149,45 @@
                                 </form> 
                               </div>
                             </div>
-                            <hr />
-
-                            <div class="row">
-                              <div class="col-sm-3 col-md-2 col-5">
-                                <label style="font-weight:bold;">Name</label>
-                              </div>
-                              <div class="col-md-8 col-6">
-                                <input type="text" name="name" value="'.$result['name'].'">
-                              </div>
-                            </div>
-                            <hr />
-
-                            <div class="row">
-                              <div class="col-sm-3 col-md-2 col-5">
-                                <label style="font-weight:bold;">Prénom</label>
-                              </div>
-                              <div class="col-md-8 col-6">
-                                <input type="text" name="firstname" value="'.$result['firstname'].'">
-                              </div>
-                            </div>
                             <hr/>
-
-
-                            <div class="row">
-                              <div class="col-sm-3 col-md-2 col-5">
-                                <label style="font-weight:bold;">Email</label>
+                            <form method="post" novalidate>
+                              <div class="row">
+                                <div class="col-sm-3 col-md-2 col-5">
+                                  <label style="font-weight:bold;">Name</label>
+                                </div>
+                                <div class="col-md-8 col-6">
+                                  <input type="text" name="name" value="'.$result['name'].'">
+                                </div>
                               </div>
-                              <div class="col-md-8 col-6">
-                                <input type="email" name="email" value="'.$result['email'].'">
+                              <hr />
+
+                              <div class="row">
+                                <div class="col-sm-3 col-md-2 col-5">
+                                  <label style="font-weight:bold;">Prénom</label>
+                                </div>
+                                <div class="col-md-8 col-6">
+                                  <input type="text" name="firstname" value="'.$result['firstname'].'">
+                                </div>
+                              </div>
+                              <hr/>
+
+
+                              <div class="row">
+                                <div class="col-sm-3 col-md-2 col-5">
+                                  <label style="font-weight:bold;">Email</label>
+                                </div>
+                                <div class="col-md-8 col-6">
+                                  <input type="email" name="email" value="'.$result['email'].'">
+                                </div>
+                              </div>
+                              <hr/>
+                            ';
+                            ?>
+                              <div class="form-group">
+                                <input type="submit" class="btn btn-primary" value="Mettre à jour" name="formsend">
                               </div>
                             </div>
-                            <hr />';
-                            ?>
-
-                          </div>
+                          </form>
                           <div class="tab-pane fade" id="connectedServices" role="tabpanel" aria-labelledby="ConnectedServices-tab">
                             <main class="container pt-5">
                               <div class="card mb-5">
@@ -203,7 +207,7 @@
                                         <td>
                                           <label class="custom-control custom-checkbox">
                                             <input type="checkbox" id="checkAll">
-                                            <td>Tout séléctionner</td>
+                                            <td>Tout Sélectionner</td>
                                             <span class="custom-control-indicator"></span>
                                           </label>
                                         </td>
@@ -257,6 +261,31 @@
     </div>
 
   <hr>
+<?php
+  if(isset($_POST['formsend'])){
+    extract($_POST);
+    if(!empty($name) || !empty($firstname) || !empty($email)){
+
+      $update=$bdd->prepare('UPDATE user SET name = :name, firstname = :firstname, email = :email WHERE id = :id_user');
+      $update->execute(array(
+            'name' => $name,
+            'firstname' => $firstname,
+            'email' => $email,
+            'id_user' => $id
+          ));
+      if($update == true){    
+        echo'<h2> Vous avez modifié !</h2>';
+      }                      
+      else  {  
+        echo '<h2> Probleme email </h2>';
+      } 
+    }
+
+    else{
+      echo'<h2>Remplir tous les champs</h2>';
+    }
+  } 
+?>
 
 <!-- Footer -->
 <footer>

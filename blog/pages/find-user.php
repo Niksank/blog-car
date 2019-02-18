@@ -114,8 +114,9 @@
             </div>
           </div>
                   <hr>';
-            $request -> closeCursor();      
+              
           }
+          $request -> closeCursor();    
         } 
         ?>
         </div>

@@ -28,7 +28,7 @@ if(isset($_POST["submit"]) && !empty($_FILES["file"]["name"])){
             $insert = $bdd->query(" UPDATE `user` SET `image`= '".$_GET['name']."-".$fileName."' WHERE `name`='".$_GET['name']."'");
             if($insert){
                 $statusMsg = "The file ".$fileName. " has been uploaded successfully.";
-                header('Location: ../accountv2.php');
+                header('Location: ../account.php');
             }else{
                 $statusMsg = "File upload failed, please try again.";
             } 

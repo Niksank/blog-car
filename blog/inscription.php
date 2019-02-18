@@ -1,6 +1,10 @@
 <?php
   include 'bdd/database.php';
   global $bdd;
+  
+  if(isset($_SESSION['email'])){
+    header('Location: index.php');
+  }
 ?>
 
 <!DOCTYPE html>
@@ -103,6 +107,11 @@
             <div id="success"></div>
             <div class="form-group">
               <input type="submit" class="btn btn-primary" value="S'inscrire" name="formsend">
+            </div>
+            <div class="form-group">
+              <a href="login.php" >
+                <span type="text" class="btn btn-primary" name="formlogin" id="inscription">Se connecter</span>
+              </a> 
             </div>
           </form>
         </div>

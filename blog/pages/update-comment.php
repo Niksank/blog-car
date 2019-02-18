@@ -6,6 +6,11 @@
       include '../bdd/database.php';
       global $bdd;  
     }
+    else if($_SESSION['type'] == 'superuser'){
+      $id = $_SESSION['id'];
+      include '../bdd/database.php';
+      global $bdd;  
+    }
     else{
       header('Location: ../index.php');
     } 
@@ -114,7 +119,7 @@
             <br>
             <div id="success"></div>
             <div class="form-group">
-              <input type="submit" class="btn btn-primary" value="Mettre à jour l'article" name="formsend">
+              <input type="submit" class="btn btn-primary" value="Mettre à jour le commentaire" name="formsend">
             </div>
           </form>
         </div>

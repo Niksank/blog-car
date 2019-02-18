@@ -1,6 +1,10 @@
 <?php 
+ 
   include 'bdd/database.php';
   global $bdd;  
+   if(isset($_SESSION['email'])){
+    echo'ouii';
+  }
 ?>  
 
 <!DOCTYPE html>
