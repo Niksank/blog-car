@@ -101,6 +101,13 @@
                     $request -> execute(['id_user' => $id]);
                     $result = $request -> fetch();
                     $request->closeCursor();
+
+                    $countComment = $bdd -> prepare("SELECT COUNT(comment) AS comment FROM comments WHERE id_user=:id_user");
+                    $countComment -> execute(['id_user' => $id]);
+                    $resultCountComment = $countComment -> fetch();
+                    $countComment->closeCursor();
+
+                    
                     $imageUrl = 'uploads/'.$result['image'];
                   ?>             
                   <div class="card-body">
@@ -115,7 +122,7 @@
                         <div class="userData ml-3">
                           <h2 class="d-block" style="font-size: 1.5rem; font-weight: bold"><a href="javascript:void(0);"> <?php echo $result['name'].' '.$result['firstname']?></a></h2>
                           <h6 class="d-block">Visiteurs</h6>
-                          <h6 class="d-block">150 Commentaires</h6>
+                          <h6 class="d-block"><?php echo $resultCountComment['comment']; ?> Commentaires</h6>
                         </div>
                         <div class="ml-auto">
                           <input type="button" class="btn btn-primary d-none" id="btnDiscard" value="Discard Changes" />
