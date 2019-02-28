@@ -99,7 +99,7 @@
         <div class="col-lg-8 col-md-10 mx-auto">
           <p></p>
 
-          <form method="post" novalidate>
+          <form method="post" enctype="multipart/form-data" novalidate>
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
                 <label>Titre</label>
@@ -130,8 +130,7 @@
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
                 <label>Images</label>
-                <input type="text" name="image" class="form-control" placeholder="Lien d'image" id="image" required data-validation-required-message="Veuillez mettre un lien d'image">
-                <p class="help-block text-danger"></p>
+                <input type="file" name="file">
               </div>
             </div>
             <br>
@@ -146,10 +145,23 @@
 
     <hr>
     <?php
-   
+
     if(isset($_POST['formsend'])){
-     extract($_POST);
-      if(!empty($title) && !empty($subtitle) && !empty($category)  && !empty($description) && !empty($image)){
+      extract($_POST);
+
+      $targetDir = "../uploads/";
+      $fileName = basename(date('Y-m-d-H_i-').$id.'-'.$_FILES["file"]["name"]);
+      $targetFilePath = $targetDir.$fileName;
+      $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
+
+      if(!empty($title) && !empty($subtitle) && !empty($category)  && !empty($description)){
+
+        $allowTypes = array('jpg','png','jpeg','gif');
+        if(in_array($fileType, $allowTypes)){
+          move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath);
+        }else{
+          $statusMsg = 'Only jpeg or png file';
+        }
 
         $req=$bdd->prepare("SELECT * FROM user WHERE email = :email");
         $req->execute(['email'=> $_SESSION['email']]);
@@ -163,7 +175,7 @@
             'id_user' => $_SESSION['id'],
             'post_text' => $description,
             'category' => $category,
-            'image' => $image
+            'image' => $fileName
           ));
           echo'<h2> Vous avez ajouté !</h2>';
         }

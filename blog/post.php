@@ -83,7 +83,7 @@
     $request -> closeCursor();
   ?>
 
-    <header class="masthead" style="background-image: url('<?php echo $result['article_image'];?>')">
+    <header class="masthead" style="background-image: url('uploads/<?php echo $result['article_image'];?>')">
       <div class="overlay"></div>
       <div class="container">
         <div class="row">
