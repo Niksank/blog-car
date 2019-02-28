@@ -134,9 +134,8 @@
             </div>
             <div class="control-group">
               <div class="form-group col-xs-12 floating-label-form-group controls">
-                <label>image</label>
-                <input type="text" name="image" class="form-control" value="<?php echo $article['article_image']; ?>" id="category" required data-validation-required-message="Veuillez rentrer la categorie">
-                <p class="help-block text-danger"></p>
+                <label>Images</label>
+                <input type="file" name="file">
               </div>
             </div>
             <br>
@@ -153,9 +152,20 @@
     <?php
    
     if(isset($_POST['formsend'])){
-     extract($_POST);
-      if(!empty($title) || !empty($subtitle) || !empty($category) || !empty($description) || !empty($image) ){
+      extract($_POST);
+      $targetDir = "../uploads/";
+      $fileName = basename(date('Y-m-d-H_i-').$id.'-'.$_FILES["file"]["name"]);
+      $targetFilePath = $targetDir.$fileName;
+      $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
 
+      if(!empty($title) || !empty($subtitle) || !empty($category) || !empty($description) || !empty($image)){
+
+        $allowTypes = array('jpg','png','jpeg','gif');
+        if(in_array($fileType, $allowTypes)){
+          move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath);
+        }else{
+          $statusMsg = 'Only jpeg or png file';
+        }
         $req=$bdd->prepare("SELECT * FROM user WHERE email = :email");
         $req->execute(['email'=> $_SESSION['email']]);
         $result = $req -> fetch();
@@ -167,7 +177,7 @@
             'description' => $subtitle,
             'post_text' => $description,
             'category' => $category,
-            'image' => $image,
+            'image' => $file,
             'id_article' => $_GET['id_article']
           ));
           echo'<h2> Vous avez modifié !</h2>';

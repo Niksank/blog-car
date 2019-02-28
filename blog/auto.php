@@ -97,7 +97,7 @@
         while($row = $request -> fetch()){
           echo'
           <div class="row">
-            <div class="col-sm"><img src="'.$row['article_image'].'" width="350px" height="200px" /></div>
+            <div class="col-sm"><img src="uploads/'.$row['article_image'].'" width="350px" height="200px" /></div>
               <div class="col-8">
                 <div class="post-preview">
                   <a href="post.php?id_article='.$row['id_article'].'">
