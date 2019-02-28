@@ -12,5 +12,6 @@ Import database called "blog_car.sql" on your database
 Go to localhost then blog folder
 
 Admin user : nks@outlook.fr
+
 password : azerty
 
