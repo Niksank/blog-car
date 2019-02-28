@@ -121,7 +121,7 @@
                         </div>
                         <div class="userData ml-3">
                           <h2 class="d-block" style="font-size: 1.5rem; font-weight: bold"><a href="javascript:void(0);"> <?php echo $result['name'].' '.$result['firstname']?></a></h2>
-                          <h6 class="d-block">Visiteurs</h6>
+                          <h6 class="d-block"></h6>
                           <h6 class="d-block"><?php echo $resultCountComment['comment']; ?> Commentaires</h6>
                         </div>
                         <div class="ml-auto">

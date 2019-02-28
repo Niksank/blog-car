@@ -11,7 +11,6 @@ while($row = $request -> fetch()){
             <div class="title h5">
               <img src="uploads/'.$row['image'].'" class="img-circle avatar" alt="user profile image" style="width:100px;height:100px;">
               <b>'.$row['name'].' '.$row['firstname'].'</b>
-              <h6 class="text-muted time" style="float: right;">1 minute ago</h6>
             </div> 
           </div>
         </div> 
