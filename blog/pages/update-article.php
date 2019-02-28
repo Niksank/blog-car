@@ -104,7 +104,7 @@
         <div class="col-lg-8 col-md-10 mx-auto">
           <p></p>
 
-          <form method="post" novalidate>
+          <form method="post" enctype="multipart/form-data">
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
                 <label>Titre</label>
@@ -158,7 +158,7 @@
       $targetFilePath = $targetDir.$fileName;
       $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
 
-      if(!empty($title) || !empty($subtitle) || !empty($category) || !empty($description) || !empty($image)){
+      if(!empty($title) || !empty($subtitle) || !empty($category) || !empty($description)){
 
         $allowTypes = array('jpg','png','jpeg','gif');
         if(in_array($fileType, $allowTypes)){
@@ -177,7 +177,7 @@
             'description' => $subtitle,
             'post_text' => $description,
             'category' => $category,
-            'image' => $file,
+            'image' => $fileName,
             'id_article' => $_GET['id_article']
           ));
           echo'<h2> Vous avez modifié !</h2>';
